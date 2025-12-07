@@ -7,6 +7,8 @@ Built with **Node.js** and **Express**, it provides clean REST endpoints for cre
 
 * **Node.js**
 * **Express**
+* **MongoDB Atlas**
+* **Mongoose**
 
 ## Setup
 
@@ -17,10 +19,11 @@ npm install
 npm run dev
 ```
 
-Create an environment file `.env.development.local`:
+Create an environment file `.env.development.local` and copy and paste the contents of `.env.example`:
 
 ```env
 PORT=5000
+DB_URI=<your_mongodb_atlas_connection_string_here>
 ```
 
 ## Run the Server
