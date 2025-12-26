@@ -96,7 +96,7 @@ subscriptionSchema.pre("save", function (next) {
     this.status = "expired";
   }
 
-  next();
+  // next();
 });
 
 const Subscription = mongoose.model("Subscription", subscriptionSchema);
