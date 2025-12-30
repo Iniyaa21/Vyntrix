@@ -18,8 +18,7 @@ export const createSubscription = async (req, res, next) => {
 
 export const getUserSubscriptions = async (req, res, next) => {
   try {
-    // Check if the user is the same as the one in the token
-    if (req.user.id !== req.params.id) {
+    if (req.user.id !== req.params.id && req.user.role !== "admin") {
       const error = new Error("You are not the owner of this account");
       error.statusCode = 401;
       throw error;
