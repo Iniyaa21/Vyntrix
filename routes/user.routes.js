@@ -7,7 +7,7 @@ const userRouter = Router();
 
 userRouter.get("/", authenticate, authorizeAdmin, getUsers);
 
-userRouter.get("/:id", authenticate, authorizeAdmin, getUser);
+userRouter.get("/:id", authenticate, getUser);
 
 userRouter.post("/", (req, res) => {
   res.send({
