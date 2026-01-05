@@ -30,16 +30,33 @@ Error responses follow a consistent format:
   error: <error details>
 }
 ```
+---
 ### Auth Endpoints
 
 `POST /api/v1/auth/sign-up`
 
 Creates a new user account.
 
-Request body:
-- name (string, required)
-- email (string, required)
-- password (string, required)
+Example  request body:
+```
+{
+  "name": "Jahoda",
+  "email": "jahoda@gmail.com",
+  "password": "abc123"
+}
+```
+
+Response:
+```
+{
+    "success": true,
+    "message": "User created successfully",
+    "data": {
+        "token": <jwt token>,
+        "user": <user object>
+    }
+}
+```
 
 Behavior:
 
@@ -48,39 +65,39 @@ Behavior:
 - Creates a new user
 - Returns a JWT
 
-Response:
-```
-{
-    success: true,
-    data: {
-        user: <user object>,
-        token: <jwt token>
-    }
-}
-```
+---
+
 `POST /api/v1/auth/sign-in`
 
 Authenticates an existing user.
 
-Request body:
+Example request body:
 
-- email (string, required)
-- password (string, required)
+```
+{
+  "email": "jahoda@gmail.com",
+  "password": "abc123"
+}
+```
+
+Response:
+```
+{
+ "success": true,
+ "message": "User signed in successfully",
+  "data": {
+        "token": <jwt token>,
+        "user": <user object>
+    }
+}
+```
 
 Behavior:
 
 - Verifies credentials
 - Returns a JWT
-
-Response:
-```
-{
-  user: <user object>,
-  token: <jwt token>
-}
-```
 ### User Endpoints
-
+---
 `GET /api/v1/users`
 
 - Authentication: Required
@@ -88,35 +105,67 @@ Response:
 - Returns a list of all users in the system.
 - Access rules:
     - Only users with the admin role can access this endpoint
+    - A bearer token has to be included in the header
+    - No request body
+- Response:
+```
+{
+  "success": true,
+  "data": [
+    <user-objects>
+  ]
+}
+```
 
+---
 `GET /api/v1/users/:id`
 
 - Authentication: Required
 - Authorization:
     - The user can access their own profile
     - Admin users can access any user profile
-- Returns details of a specific user.
-
+- Returns details of a specific user
+- No request body
+- Response:
+```
+{
+  "success": true,
+  "data": <user-object>
+}
+```
+---
 ### Subscription Endpoints
 
 `POST /api/v1/subscriptions`
 
-- Authentication: Required
+- Authentication: Required 
 - Creates a new subscription for the authenticated user.
-- Request body includes:
-    - name
-    - price
-    - currency
-    - frequency
-    - category
-    - paymentMethod
-    - startDate
-    - renewalDate (optional)
+- Bearer token must be included in request header.
+- Example request body:
+```
+{
+  "name":"Prime Video", 
+  "price": 15.99, 
+  "currency":"USD",
+  "frequency":"monthly",
+  "category":"entertainment",
+  "startDate": "2025-12-26T13:50:06.032Z",
+  "paymentMethod" : "Credit Card"
+}
+```
+
+Response:
+```
+{
+  "success": true,
+  "data": <subscription-object>
+}
+```
 - Behavior:
     - Subscription is automatically linked to the authenticated user
     - Renewal date is auto-calculated if not provided
     - Subscription status is auto-managed based on dates
-
+---
 `GET /api/v1/subscriptions/user/:id`
 
 - Authentication: Required
@@ -124,7 +173,17 @@ Response:
     - Users can access only their own subscriptions
     - Admin users can access subscriptions for any user
     - Returns all subscriptions associated with a specific user.
-
+- Bearer token must be included in request header.
+- Response:
+```
+{
+  "success": true,
+  "data": [
+    <subscription-objects>
+  ]
+}
+```
+---
 ### Authorization Summary
 
 - Public:
