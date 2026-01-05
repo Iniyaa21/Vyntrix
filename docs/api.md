@@ -96,8 +96,10 @@ Behavior:
 
 - Verifies credentials
 - Returns a JWT
-### User Endpoints
+
 ---
+### User Endpoints
+
 `GET /api/v1/users`
 
 - Authentication: Required
@@ -133,8 +135,44 @@ Behavior:
   "data": <user-object>
 }
 ```
+
+---
+`DELETE /api/v1/users/:id`
+
+- Authentication: Required
+- Authorization:
+    - The user can delete their own profile
+    - Admin users can delete any user profile
+- No request body
+- Response:
+```
+{
+  "success": true,
+  "message": "User deleted successfully"
+}
+```
 ---
 ### Subscription Endpoints
+`GET /api/v1/subscriptions`
+
+- Authentication: Required 
+- Authorization: Admin only
+- Returns a list of all subscriptions in the system.
+- Access rules:
+    - Only users with the admin role can access this endpoint
+    - A bearer token has to be included in the header
+    - No request body
+
+Response:
+```
+{
+  "success": true,
+  "data": [
+    <subscription-objects>
+    ]
+}
+```
+---
 
 `POST /api/v1/subscriptions`
 
@@ -181,6 +219,24 @@ Response:
   "data": [
     <subscription-objects>
   ]
+}
+```
+
+---
+`GET /api/v1/subscriptions/:id`
+
+- Authentication: Required
+- Authorization:
+    - Users can access only their own subscription
+    - Admin users can access subscription for any user
+    - Returns the specified subscription details.
+- Bearer token must be included in request header.
+- Response:
+```
+{
+  "success": true,
+  "data": <subscription-object>
+  
 }
 ```
 ---
