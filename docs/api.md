@@ -143,6 +143,7 @@ Behavior:
 - Authorization:
     - The user can delete their own profile
     - Admin users can delete any user profile
+- Deleting a user also deletes all subscriptions associated with that user
 - No request body
 - Response:
 ```
@@ -259,4 +260,5 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
