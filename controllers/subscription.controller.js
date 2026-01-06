@@ -9,6 +9,7 @@ export const createSubscription = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
+      message: "Subscription created successfully",
       data: subscription,
     });
   } catch (error) {
