@@ -197,6 +197,7 @@ Response:
 ```
 {
   "success": true,
+  "message": "Subscription created successfully",
   "data": <subscription-object>
 }
 ```
@@ -260,5 +261,6 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
