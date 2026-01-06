@@ -1,3 +1,4 @@
+import Subscription from "../models/subscription.model.js";
 import User from "../models/user.model.js";
 
 export const getUsers = async (req, res, next) => {
@@ -56,7 +57,7 @@ export const deleteUser = async (req, res, next) => {
       throw error;
     }
     const userIdToDelete = req.params.id;
-
+    await Subscription.deleteMany({ user: userIdToDelete });
     const deletedUser = await User.findByIdAndDelete(userIdToDelete);
 
     if (!deletedUser) {
