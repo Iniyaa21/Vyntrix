@@ -2,13 +2,13 @@
 
 This document describes the currently implemented API endpoints for the Vyntrix Subscription Tracker API. Only stable and functional endpoints are documented here. Additional routes will be added in the future.
 
-### Base URL
+## Base URL
 
 All endpoints are prefixed with:
 
 `/api/v1`
 
-### Authentication
+## Authentication
 
 Vyntrix uses JWT-based authentication.
 
@@ -19,7 +19,7 @@ Vyntrix uses JWT-based authentication.
 
 If authentication fails, the request is rejected before reaching the controller.
 
-### Response Format
+## Response Format
 
 Successful responses return appropriate HTTP status codes along with JSON data.
 
@@ -31,7 +31,7 @@ Error responses follow a consistent format:
 }
 ```
 ---
-### Auth Endpoints
+## Auth Endpoints
 
 `POST /api/v1/auth/sign-up`
 
@@ -98,7 +98,7 @@ Behavior:
 - Returns a JWT
 
 ---
-### User Endpoints
+## User Endpoints
 
 `GET /api/v1/users`
 
@@ -152,7 +152,7 @@ Behavior:
 }
 ```
 ---
-### Subscription Endpoints
+## Subscription Endpoints
 `GET /api/v1/subscriptions`
 
 - Authentication: Required 
@@ -240,7 +240,7 @@ Response:
 }
 ```
 ---
-### Authorization Summary
+## Authorization Summary
 
 - Public:
     - Sign-up
@@ -253,9 +253,10 @@ Response:
     - View all users
     - View any user’s subscriptions or profile
 
-### Notes
+## Notes
 - All protected routes require a valid JWT
 - Requests failing authentication or authorization are rejected early
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
