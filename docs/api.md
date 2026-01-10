@@ -32,6 +32,7 @@ Error responses follow a consistent format:
 ```
 ---
 ## Auth Endpoints
+### Sign Up
 
 `POST /api/v1/auth/sign-up`
 
@@ -66,6 +67,7 @@ Behavior:
 - Returns a JWT
 
 ---
+### Sign In
 
 `POST /api/v1/auth/sign-in`
 
@@ -100,6 +102,8 @@ Behavior:
 ---
 ## User Endpoints
 
+### Get Users
+
 `GET /api/v1/users`
 
 - Authentication: Required
@@ -120,6 +124,8 @@ Behavior:
 ```
 
 ---
+
+### Get User
 `GET /api/v1/users/:id`
 
 - Authentication: Required
@@ -137,6 +143,8 @@ Behavior:
 ```
 
 ---
+
+### Delete User
 `DELETE /api/v1/users/:id`
 
 - Authentication: Required
@@ -152,7 +160,9 @@ Behavior:
   "message": "User deleted successfully"
 }
 ```
+---
 
+### Update User
 `PATCH /api/v1/users/:id`
 - Authentication: Required
 - Authorization:
@@ -179,6 +189,8 @@ Behavior:
 
 ---
 ## Subscription Endpoints
+
+### Get Subscriptions
 `GET /api/v1/subscriptions`
 
 - Authentication: Required 
@@ -200,6 +212,7 @@ Response:
 ```
 ---
 
+### Create Subscription
 `POST /api/v1/subscriptions`
 
 - Authentication: Required 
@@ -231,6 +244,8 @@ Response:
     - Renewal date is auto-calculated if not provided
     - Subscription status is auto-managed based on dates
 ---
+
+### Get User Subscriptions
 `GET /api/v1/subscriptions/user/:id`
 
 - Authentication: Required
@@ -250,6 +265,8 @@ Response:
 ```
 
 ---
+
+### Get Subscription
 `GET /api/v1/subscriptions/:id`
 
 - Authentication: Required
