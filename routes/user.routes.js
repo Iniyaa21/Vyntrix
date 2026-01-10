@@ -9,7 +9,7 @@ userRouter.get("/", authenticate, authorizeAdmin, getUsers);
 
 userRouter.get("/:id", authenticate, getUser);
 
-userRouter.put("/:id", authenticate, updateUser);
+userRouter.patch("/:id", authenticate, updateUser);
 
 userRouter.delete("/:id", authenticate, deleteUser);
 
