@@ -152,6 +152,31 @@ Behavior:
   "message": "User deleted successfully"
 }
 ```
+
+`PATCH /api/v1/users/:id`
+- Authentication: Required
+- Authorization:
+  - The user can update their own profile
+  - Admin users can update any profile
+- Allowed fields for update: 
+  - name
+  - email
+- Example request body:
+```
+{
+  "name":"newname"
+}
+```
+
+- Response:
+```
+{
+  "success":true,
+  "message": "User has been updated successfully",
+  "data": <user-object>
+}
+```
+
 ---
 ## Subscription Endpoints
 `GET /api/v1/subscriptions`
@@ -261,6 +286,7 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
 
