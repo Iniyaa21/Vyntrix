@@ -74,3 +74,63 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateUser = async (req, res, next) => {
+  try {
+    const userIdToUpdate = req.params.id;
+
+    if (req.user.id !== userIdToUpdate && req.user.role !== "admin") {
+      const error = new Error(
+        "You do not have permission to update this user's details"
+      );
+      error.statusCode = 403;
+      throw error;
+    }
+
+    if (Object.keys(req.body).length === 0) {
+      const error = new Error("No fields provided for update");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const forbiddenFields = [
+      "password",
+      "role",
+      "_id",
+      "createdAt",
+      "updatedAt",
+    ];
+
+    const hasForbiddenField = forbiddenFields.some(
+      (field) => field in req.body
+    );
+
+    if (hasForbiddenField) {
+      const error = new Error(
+        "Some fields can't be updated using this endpoint"
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userIdToUpdate,
+      { $set: req.body },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User has been updated successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
