@@ -1,5 +1,6 @@
 import Subscription from "../models/subscription.model.js";
 import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 export const getUsers = async (req, res, next) => {
   try {
@@ -24,7 +25,7 @@ export const getUser = async (req, res, next) => {
 
     if (req.user.id !== req.params.id && req.user.role !== "admin") {
       const error = new Error(
-        "You do not have permission to access this user's details"
+        "You do not have permission to access this user's details",
       );
       error.statusCode = 403;
       throw error;
@@ -51,7 +52,7 @@ export const deleteUser = async (req, res, next) => {
   try {
     if (req.user.id !== req.params.id && req.user.role !== "admin") {
       const error = new Error(
-        "You do not have permission to delete this user's details"
+        "You do not have permission to delete this user's details",
       );
       error.statusCode = 403;
       throw error;
@@ -81,7 +82,7 @@ export const updateUser = async (req, res, next) => {
 
     if (req.user.id !== userIdToUpdate && req.user.role !== "admin") {
       const error = new Error(
-        "You do not have permission to update this user's details"
+        "You do not have permission to update this user's details",
       );
       error.statusCode = 403;
       throw error;
@@ -102,12 +103,12 @@ export const updateUser = async (req, res, next) => {
     ];
 
     const hasForbiddenField = forbiddenFields.some(
-      (field) => field in req.body
+      (field) => field in req.body,
     );
 
     if (hasForbiddenField) {
       const error = new Error(
-        "Some fields can't be updated using this endpoint"
+        "Some fields can't be updated using this endpoint",
       );
       error.statusCode = 400;
       throw error;
@@ -116,7 +117,7 @@ export const updateUser = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       userIdToUpdate,
       { $set: req.body },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedUser) {
@@ -129,6 +130,68 @@ export const updateUser = async (req, res, next) => {
       success: true,
       message: "User has been updated successfully",
       data: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatePassword = async (req, res, next) => {
+  try {
+    const userIdToUpdate = req.params.id;
+
+    if (req.user.id !== userIdToUpdate && req.user.role !== "admin") {
+      const error = new Error(
+        "You do not have permission to update this user's password",
+      );
+      error.statusCode = 403;
+      throw error;
+    }
+
+    if (!req.body.currentPassword || !req.body.newPassword) {
+      const error = new Error(
+        "Both current password and new password are expected",
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    if (Object.keys(req.body).length !== 2) {
+      const error = new Error(
+        "Kindly provide only current password and new password",
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const user = await User.findById(userIdToUpdate);
+
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      req.body.currentPassword,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      const error = new Error("The entered current password is invalid");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
     });
   } catch (error) {
     next(error);
