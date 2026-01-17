@@ -188,6 +188,34 @@ Behavior:
 ```
 
 ---
+
+### Change Password
+`PATCH /api/v1/users/:id/password`
+- Authentication: Required
+- Authorization:
+  - The user can change their own password
+  - Admin users can change any user's password
+- Allowed fields in request body (both fields are required): 
+  - currentPassword
+  - newPassword
+- Existing sessions remain active after password change
+- Example request body:
+```
+{
+  "currentPassword": "abc123",
+  "newPassword": "345"
+}
+```
+
+- Response:
+```
+{
+  "success": true,
+  "message": "Password updated successfully"
+}
+```
+
+---
 ## Subscription Endpoints
 
 ### Get Subscriptions
@@ -303,6 +331,7 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
 
