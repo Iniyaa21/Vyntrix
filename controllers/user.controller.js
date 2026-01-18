@@ -1,6 +1,7 @@
 import Subscription from "../models/subscription.model.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 export const getUsers = async (req, res, next) => {
   try {
@@ -49,6 +50,8 @@ export const getUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     if (req.user.id !== req.params.id && req.user.role !== "admin") {
       const error = new Error(
@@ -58,8 +61,9 @@ export const deleteUser = async (req, res, next) => {
       throw error;
     }
     const userIdToDelete = req.params.id;
-    await Subscription.deleteMany({ user: userIdToDelete });
-    const deletedUser = await User.findByIdAndDelete(userIdToDelete);
+    await Subscription.deleteMany({ user: userIdToDelete }).session(session);
+    const deletedUser =
+      await User.findByIdAndDelete(userIdToDelete).session(session);
 
     if (!deletedUser) {
       const error = new Error("User not found");
@@ -67,11 +71,16 @@ export const deleteUser = async (req, res, next) => {
       throw error;
     }
 
+    await session.commitTransaction();
+    session.endSession();
+
     res.status(200).json({
       success: true,
       message: "User deleted successfully",
     });
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     next(error);
   }
 };
