@@ -193,21 +193,31 @@ Behavior:
 `PATCH /api/v1/users/:id/password`
 - Authentication: Required
 - Authorization:
-  - The user can change their own password
-  - Admin users can change any user's password
-- Allowed fields in request body (both fields are required): 
-  - currentPassword
-  - newPassword
-- Existing sessions remain active after password change
+  - Users can change their own password by providing the current password
+  - Admin users can change any user’s password without providing the current password
 - Example request body:
-```
-{
-  "currentPassword": "abc123",
-  "newPassword": "345"
-}
-```
+#### User-initiated password change
+  Both fields are required: currentPassword, newPassword
+  ```
+  {
+    "currentPassword": "abc123",
+    "newPassword": "345"
+  }
+  ```
+#### Admin-initiated password change
+  Only the newPassword is allowed.
+  ```
+  {
+    "newPassword": "345"
+  }
+  ```
 
-- Response:
+  #### Notes
+  - Existing sessions remain active after password change
+  - Extra fields in the request body are rejected
+  - Passwords are securely hashed before storage
+
+#### Response:
 ```
 {
   "success": true,
@@ -331,6 +341,7 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
 
