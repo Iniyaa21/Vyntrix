@@ -148,22 +148,6 @@ export const updatePassword = async (req, res, next) => {
       throw error;
     }
 
-    if (!req.body.currentPassword || !req.body.newPassword) {
-      const error = new Error(
-        "Both current password and new password are expected",
-      );
-      error.statusCode = 400;
-      throw error;
-    }
-
-    if (Object.keys(req.body).length !== 2) {
-      const error = new Error(
-        "Kindly provide only current password and new password",
-      );
-      error.statusCode = 400;
-      throw error;
-    }
-
     const user = await User.findById(userIdToUpdate);
 
     if (!user) {
@@ -172,15 +156,39 @@ export const updatePassword = async (req, res, next) => {
       throw error;
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      req.body.currentPassword,
-      user.password,
-    );
+    if (req.user.role === "admin") {
+      if (!req.body.newPassword || Object.keys(req.body).length !== 1) {
+        const error = new Error("Provide only new password field");
+        error.statusCode = 400;
+        throw error;
+      }
+    } else {
+      if (!req.body.currentPassword || !req.body.newPassword) {
+        const error = new Error(
+          "Both current password and new password are expected",
+        );
+        error.statusCode = 400;
+        throw error;
+      }
 
-    if (!isPasswordValid) {
-      const error = new Error("The entered current password is invalid");
-      error.statusCode = 400;
-      throw error;
+      if (Object.keys(req.body).length !== 2) {
+        const error = new Error(
+          "Kindly provide only current password and new password",
+        );
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        req.body.currentPassword,
+        user.password,
+      );
+
+      if (!isPasswordValid) {
+        const error = new Error("The entered current password is invalid");
+        error.statusCode = 401;
+        throw error;
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
