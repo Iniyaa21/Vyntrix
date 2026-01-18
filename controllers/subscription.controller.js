@@ -115,9 +115,31 @@ export const updateSubscription = async (req, res, next) => {
     );
 
     if (hasForbiddenField) {
-      const error = new Error("Only payment method and status are allowed to be updated");
+      const error = new Error(
+        "Only payment method and status are allowed to be updated",
+      );
       error.statusCode = 400;
       throw error;
+    }
+
+    if (req.body.status) {
+      const allowedStatusTransitions = {
+        active: ["cancelled"],
+        cancelled: [],
+        expired: [],
+      };
+      const currentStatus = subscription.status;
+      const nextStatus = req.body.status;
+
+      const allowedNextStatuses = allowedStatusTransitions[currentStatus] || [];
+
+      if (!allowedNextStatuses.includes(nextStatus)) {
+        const error = new Error(
+          `Cannot change subscription status from '${currentStatus}' to '${nextStatus}'`,
+        );
+        error.statusCode = 400;
+        throw error;
+      }
     }
 
     const updatedSubscription = await Subscription.findByIdAndUpdate(
