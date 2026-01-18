@@ -322,6 +322,36 @@ Response:
 }
 ```
 ---
+### Update Subscription
+`PATCH /api/v1/subscriptions/:id`
+- Authentication: Required
+- Authorization:
+  - The user can update their own subscription
+  - Admin users can update any subscription
+- Allowed fields for update: 
+  - paymentMethod
+  - status
+- Status rules:
+  - Users can only change status from `active` to `cancelled`
+  - Other transitions are not allowed via this endpoint
+- Example request body:
+```
+{
+  "paymentMethod":"credit card",
+  "status":"cancelled"
+}
+```
+
+- Response:
+```
+{
+  "success":true,
+  "message": "Subscription has been updated successfully",
+  "data": <subscription-object>
+}
+```
+
+---
 ## Authorization Summary
 
 - Public:
@@ -341,6 +371,7 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
 
