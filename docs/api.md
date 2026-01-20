@@ -352,6 +352,21 @@ Response:
 ```
 
 ---
+### Delete Subscription
+`DELETE /api/v1/subscriptions/:id`
+
+- Authentication: Required
+- Authorization: Admin only
+- ⚠️ This is a hard delete and permanently removes the subscription from the database.
+- Use the cancel subscription endpoint for normal user flow.
+- Response:
+```
+{
+  "success": true,
+  "message": "Subscription has been deleted successfully"
+}
+```
+---
 ## Authorization Summary
 
 - Public:
