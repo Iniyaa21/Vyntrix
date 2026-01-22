@@ -367,6 +367,24 @@ Response:
 }
 ```
 ---
+
+### Cancel Subscription
+`PATCH /api/v1/subscriptions/:id/cancel`
+
+- Authentication: Required
+- Authorization: 
+  - The user can cancel their own subscription
+  - Admins can cancel any subscription
+- Only active subscriptions can be cancelled
+- No request body
+- Response:
+```
+{
+  "success": true,
+  "message": "Subscription has been cancelled successfully"
+}
+```
+---
 ## Authorization Summary
 
 - Public:
