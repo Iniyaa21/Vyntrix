@@ -394,9 +394,15 @@ Response:
     - Create subscriptions
     - View their own profile
     - View their own subscriptions
+    - Delete their profile
+    - Update their profile
+    - Change their password
+    - Cancel their subscription
 - Admin-only:
     - View all users
+    - View all subscriptions
     - View any user’s subscriptions or profile
+    - Delete a subscription
 
 ## Notes
 - All protected routes require a valid JWT
@@ -404,6 +410,7 @@ Response:
 - Additional endpoints are planned but not yet implemented
 
 This API documentation reflects the current state of the project and will evolve as new features are added.
+
 
 
 
