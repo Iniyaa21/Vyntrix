@@ -9,4 +9,8 @@ authRouter.post("/sign-in", signIn);
 
 authRouter.post("/sign-out", signOut);
 
+authRouter.post("/__ping", (req, res) => {
+  res.json({ auth: "ok" });
+});
+
 export default authRouter;

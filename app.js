@@ -25,15 +25,6 @@ app.use("/api/v1/workflows", workflowRouter);
 
 app.use(errorMiddleware);
 
-console.log(
-  app._router.stack
-    .filter(r => r.route)
-    .map(r => ({
-      method: Object.keys(r.route.methods)[0],
-      path: r.route.path,
-    }))
-);
-
 app.get("/", (req, res) => {
   res.send("Welcome to Vyntrix - A Subscription Tracker API!");
 });
