@@ -10,6 +10,8 @@ Built with **Node.js** and **Express**, it provides clean REST endpoints for cre
 * **MongoDB Atlas**
 * **Mongoose**
 * **Arcjet**
+* **Upstash**
+* **Nodemailer**
 
 ## Quick Setup
 
