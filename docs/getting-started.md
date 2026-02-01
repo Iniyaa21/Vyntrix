@@ -10,8 +10,6 @@ Make sure you have the following installed:
 
 - **Node.js** (v18 or later recommended)
 - **npm**
-- A **MongoDB Atlas** account
-- An **Arcjet** account (for request protection)
 
 
 ## Clone the Repository
@@ -105,6 +103,50 @@ __Steps to get your Arcjet API key:__
 
 `ARCJET_ENV` should be set to `"development"` for local usage.
 
+### 6. QStash (Upstash) Configuration
+```
+# Development
+QSTASH_URL="http://127.0.0.1:8080"
+QSTASH_TOKEN=
+
+# Production
+QSTASH_URL="https://qstash.upstash.io"
+QSTASH_TOKEN=
+QSTASH_CURRENT_SIGNING_KEY=
+QSTASH_NEXT_SIGNING_KEY=
+
+```
+
+Vyntrix uses QStash (by Upstash) for reliable email reminder workflow for subscription renewal.
+
+#### Development Setup (Local)
+For local development, QStash runs in dev mode using the QStash CLI.
+
+__Steps to set up QStash locally:__
+- Run the following command:
+`npx @upstash/qstash-cli dev`
+- This starts a local QStash server at `http://127.0.0.1:8080`
+- The CLI will generate a temporary QStash token
+- Copy the token and paste it into your `.env.development.local` file as `QSTASH_TOKEN`
+
+⚠️ __Note:__
+For development, you do not need `QSTASH_CURRENT_SIGNING_KEY` or `QSTASH_NEXT_SIGNING_KEY`
+
+#### Production Setup
+In production, Vyntrix uses the hosted QStash service provided by Upstash.
+__Steps to get your QStash credentials:__
+- Go to https://upstash.com
+- Create an account (or log in)
+- Create a new QStash project
+- Copy the following from the QStash dashboard:
+  - QStash Token
+  - Current Signing Key
+  - Next Signing Key
+- Add them to your production environment variables
+
+These signing keys are used to verify incoming QStash requests and should always be set in production.
+
+---
 ## Running the Server
 
 Once your environment variables are set, start the development server:
@@ -119,3 +161,4 @@ If everything is configured correctly, the server should start and listen on the
 - Read the [Architecture documentation](architecture.md) to understand the project structure.
 
 - Explore the [API Documentation](api.md) to see available endpoints.
+
