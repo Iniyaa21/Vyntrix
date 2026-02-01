@@ -146,6 +146,32 @@ __Steps to get your QStash credentials:__
 
 These signing keys are used to verify incoming QStash requests and should always be set in production.
 
+### 7. Nodemailer (Email) Configuration
+```
+EMAIL_ACCOUNT=<your_email_address>
+EMAIL_PASSWORD=<your_google_app_password>
+```
+
+Vyntrix uses Nodemailer to send subscription renewal reminder emails.
+
+#### Gmail Setup (Google App Password)
+For security reasons, Gmail does not allow direct use of your account password. Instead, you must generate a __Google App Password__.
+
+__Steps to generate a Google App Password:__
+1. Go to https://myaccount.google.com
+2. Navigate to Security
+3. Enable 2-Step Verification on your Google account (required)
+4. Once enabled, go to App passwords
+5. Create a new app password
+6. Give it a name (for example: `Vyntrix Nodemailer`)
+7. Google will generate a 16-character app password
+8. Copy the password and paste it into your `.env.development.local` file as `EMAIL_PASSWORD`
+
+#### Note:
+- `EMAIL_ACCOUNT` should be your full Gmail address, like example@gmail.com
+- `EMAIL_PASSWORD` should be the app password only
+- Do not use your normal Gmail password
+- Never commit your app password to version control
 ---
 ## Running the Server
 
@@ -161,4 +187,5 @@ If everything is configured correctly, the server should start and listen on the
 - Read the [Architecture documentation](architecture.md) to understand the project structure.
 
 - Explore the [API Documentation](api.md) to see available endpoints.
+
 
