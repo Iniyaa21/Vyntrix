@@ -107,6 +107,58 @@ Database connection logic is isolated in the `database/` directory, keeping conf
 
 Indexes are applied where appropriate (e.g., user references on subscriptions) to improve query performance.
 
+## Email Reminder Workflow (QStash)
+
+Vyntrix uses Upstash QStash to handle subscription renewal reminder emails in a reliable, event-driven way. This workflow runs asynchronously and is triggered whenever a new subscription is created.
+
+### Workflow Trigger
+- When a subscription is created, a QStash workflow is triggered
+- The subscription ID is passed as input to the workflow
+
+This ensures reminder scheduling happens independently of the API request lifecycle.
+
+### Subscription Validation
+Once the workflow starts:
+1. The subscription is fetched using the provided subscription ID
+2. The workflow terminates immediately if:
+    - The subscription does not exist
+    - The subscription is not active
+    - The renewal date has already passed
+
+These checks prevent unnecessary processing and invalid reminders.
+
+### Reminder Schedule
+
+Vyntrix supports four reminder checkpoints based on the number of days remaining before renewal:
+
+- 7 days before renewal
+- 5 days before renewal
+- 2 days before renewal
+- 1 day before renewal
+
+The workflow iterates through each of these reminder intervals sequentially.
+
+### Sleep & Execution Logic
+
+For each reminder interval:
+- The target reminder date is calculated from the renewal date
+- If the reminder date is after today, the workflow:
+  - Sleeps until the scheduled reminder date using QStash
+- If today matches the reminder date:
+  - The reminder is triggered immediately
+
+This allows precise scheduling without running background cron jobs or polling logic.
+
+### Email Delivery
+When a reminder is due:
+- An email reminder is sent using Nodemailer
+- Emails are generated using a custom HTML email template, containing:
+    - Subscription details
+    - Renewal information
+    - Plan and pricing context
+
+This keeps reminder emails consistent, readable, and user-friendly.
+
 ## Error handling
 
 Vyntrix uses a centralized error-handling middleware to format all error responses consistently.
@@ -127,3 +179,4 @@ Security is treated as a first-class concern in Vyntrix.
 - Role-based authorization restricts access to sensitive endpoints
 
 These measures collectively ensure that only valid, authorized requests are processed.
+
